@@ -1,0 +1,87 @@
+<form #validationForm="ngForm" class="editForm" novalidate>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="form-control-label" for="code">Codido</label>
+                <input class="form-control input-md" id="code" name="code" type="text"
+                    placeholder="Ingrese un codigo"
+                    [ngClass]="{'is-invalid': !code.valid && (code.dirty || code.touched || isSubmit)}"
+                    #code="ngModel" required [(ngModel)]="formInput.code">
+                <label *ngIf="!code.valid && (code.dirty || code.touched || isSubmit)"
+                    id="validation-code-error"
+                    class="error jquery-validation-error small form-text invalid-feedback">Ingrese un codigo</label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="form-control-label" for="description">Descripcion</label>
+                <input class="form-control input-md" id="description" name="email" type="text"
+                    placeholder="Ingrese una descripcion"
+                    [ngClass]="{'is-invalid': !description.valid && (description.dirty || description.touched || isSubmit)}"
+                    #description="ngModel" required [(ngModel)]="formInput.description">
+                <label *ngIf="!description.valid && (description.dirty || description.touched || isSubmit)"
+                    id="validation-description-error"
+                    class="error jquery-validation-error small form-text invalid-feedback">Ingrese una
+                    descripcion</label>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="form-control-label" for="measurement">Unidad medida</label>
+                <ng-select [ngClass]="'ng-select'" placeholder="unidades" id="measurement" name="measurement" [options]="listUnidades" [(ngModel)]="formInput.measurement"></ng-select>
+                <!-- <label *ngIf="measurement.dirty || measurement.touched || isSubmit"
+                    id="validation-measurement-error"
+                    class="error jquery-validation-error small form-text invalid-feedback">Elija una unidad</label> -->
+              </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="form-control-label" for="group">Grupos</label>
+                <ng-select [ngClass]="'ng-select'" placeholder="grupos" id="group" name="group" [options]="listGroup" [(ngModel)]="formInput.group"></ng-select>
+                <!-- <label *ngIf="measurement.dirty || measurement.touched || isSubmit"
+                    id="validation-measurement-error"
+                    class="error jquery-validation-error small form-text invalid-feedback">Elija una unidad</label> -->
+              </div>
+        </div>
+
+        <div class="col-md-6">
+            <label for="price_public">Precio al cliente</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="price_public">UYU</span>
+              </div>
+              <input class="form-control input-sm" id="price_public" name="price_public" type="number"
+                    placeholder="Precio"
+                    [ngClass]="{'is-invalid': !price_public.valid && (price_public.dirty || price_public.touched || isSubmit)}"
+                    #price_public="ngModel" required [(ngModel)]="formInput.price_public">
+                <label *ngIf="!price_public.valid && (price_public.dirty || price_public.touched || isSubmit)"
+                    id="validation-price_public-error"
+                    class="error jquery-validation-error small form-text invalid-feedback">Ingrese un precio</label>
+              
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="price">Precio base</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="price">UYU</span>
+              </div>
+              <input class="form-control input-sm" id="price" name="price" type="number"
+                    placeholder="Precio"
+                    [ngClass]="{'is-invalid': !price.valid && (price.dirty || price.touched || isSubmit)}"
+                    #price="ngModel" required [(ngModel)]="formInput.price">
+                <label *ngIf="!price.valid && (price.dirty || price.touched || isSubmit)"
+                    id="validation-price-error"
+                    class="error jquery-validation-error small form-text invalid-feedback">Ingrese un precio</label>
+              
+            </div>
+        </div>
+
+        <div class="form-group text-center">
+            <button type="button" uiSref="work" class="btn mx-3 btn-primary btn-raised" (click)="save(validationForm)">
+                Guardar
+                <span style="margin-left:10px;"><i class="feather icon-chevron-right"></i></span></button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,128 @@
+<div class="row">
+  <div class="col-12 create-user">
+    <button type="button" class="btn btn-primary" ngbTooltip="btn-primary" (click)="modalCreateUser.show()">
+      <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+          class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+          <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+          <path fill-rule="evenodd"
+            d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
+        </svg>
+      </span> Crear Usuario</button>
+  </div>
+  <div class="col-sm-12">
+    <app-card [hidHeader]="true" cardClass="user-profile-list">
+      <!-- table list de users -->
+      <div class="dt-responsive table-responsive">
+        <table id="table" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" datatable
+          class="table table-striped row-border table-hover">
+          <thead>
+            <tr>
+              <th class="no-sort">Nombre</th>
+              <th class="no-sort">Usuario</th>
+              <th class="no-sort">Fecha</th>
+              <th class="no-sort">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of dataUsers">
+              <td>
+                <div class="d-inline-block align-middle">
+                  <h6 class="m-b-0">{{user.displayName}}</h6>
+                </div>
+              </td>
+              <td>{{user.email}}</td>
+              <td>{{user.date}}</td>
+              <td>
+                <span *ngIf="!user.disabled" class="badge badge-light-success">Activo</span>
+                <span *ngIf="user.disabled" class="badge badge-light-warning">Inactivo</span>
+                <div class="overlay-edit">
+                  <button type="button" class="btn btn-icon btn-success"><i
+                      class="feather icon-edit" (click)="editUser(modalCreateUser)"></i></button>
+                  <button type="button" class="btn btn-icon btn-danger"  (click)="deleteUser(user.uid)"><i class="feather icon-trash-2"></i></button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </app-card>
+  </div>
+</div>
+
+<!-- windows modals -->
+
+<!-- create user -->
+<app-ui-modal #modalCreateUser [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h5 class="modal-title">Crear Usuario</h5>
+    <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close"
+      (click)="modalCreateUser.hide()"><span aria-hidden="true">&times;</span></button>
+  </div>
+  <div class="app-modal-body">
+    <form #validationForm="ngForm" class="editForm" novalidate>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-control-label" for="email">Usuario</label>
+            <input class="form-control input-md" id="email" name="email" type="text" placeholder="Ingrese un correo"
+              [ngClass]="{'is-invalid': !email.valid && (email.dirty || email.touched || isSubmit)}" #email="ngModel"
+              required email [(ngModel)]="formInput.email">
+            <label *ngIf="!email.valid && (email.dirty || email.touched || isSubmit)" id="validation-email-error"
+              class="error jquery-validation-error small form-text invalid-feedback">Ingrese una correo valido</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" minlength="5" name="validation-required"
+              placeholder="Ingrese un nombre"
+              [ngClass]="{'is-invalid': !displayName.valid && (displayName.dirty || displayName.touched || isSubmit)}"
+              #displayName="ngModel" required [(ngModel)]="formInput.displayName">
+            <label *ngIf="!displayName.valid && (displayName.dirty || displayName.touched || isSubmit)"
+              id="validation-required-error"
+              class="error jquery-validation-error small form-text invalid-feedback">Ingrese un nombre</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">Contraseña</label>
+            <input type="password" class="form-control" name="validation-password" placeholder="Enter Password"
+              [ngClass]="{'is-invalid': !password.valid && (password.dirty || password.touched || isSubmit)}"
+              #password="ngModel" minlength="6" required [(ngModel)]="formInput.password">
+            <label *ngIf="!password.valid && (password.dirty || password.touched || isSubmit)"
+              id="validation-password-error"
+              class="error jquery-validation-error small form-text invalid-feedback">Ingrese mas de 6 caracteres</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="form-label">Confirme contraseña</label>
+            <input type="password" class="form-control" name="validation-password-confirm" (keyup)="checkPass()"
+              [ngClass]="{'is-invalid': !checkedPassword && (confirmPassword.length != 0 || isSubmit)}"
+               [(ngModel)]="confirmPassword">
+            <label *ngIf="!checkedPassword"
+              id="validation-password-confirm-error"
+              class="error jquery-validation-error small form-text invalid-feedback">Las contraseñas no coinciden</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <div class="switch switch-primary d-inline m-r-10">
+              <input type="checkbox" id="switch-p-1" checked [(value)]="formInput.disabled">
+              <label for="switch-p-1" class="cr"></label>
+            </div>
+            <label>Habilitado</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group text-center">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+          (click)="modalCreateUser.hide()">Cerrar</button>
+        <button type="button" uiSref="work" class="btn mx-3 btn-primary btn-raised" (click)="save(validationForm)"> Guardar
+          <span style="margin-left:10px;"><i class="feather icon-chevron-right"></i></span></button>
+      </div>
+    </form>
+  </div>
+</app-ui-modal>
+

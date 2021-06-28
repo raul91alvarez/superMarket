@@ -1,0 +1,62 @@
+
+<div class="row justify-content-between">
+    <div class="col-md-6 col-xl-3">
+        <h1 class="display-4" style="font-weight: 800; font-size: larger;">Productos en stock</h1>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <app-card [hidHeader]="true" cardClass="bg-c-red notification-card">
+          <div class="card-cart row align-items-center" (click)="openPopup(modalShowCart)">
+            <div class="col-4 notify-icon"><i class="fa fa-shopping-cart"></i></div>
+            <div class="col-8 notify-cont">
+              <h4>{{cart.length}}</h4>
+              <p>Productos del pedido</p>
+            </div>
+          </div>
+        </app-card>
+      </div>
+</div>
+
+<app-card cardTitle="Lista de productos" cardClass="card-datatable">
+  <div class="table-responsive">
+    
+    <table id="table" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" datatable
+    class="table table-striped row-border table-hover">
+      <thead>
+          <tr>
+            <th>Codigo</th>
+            <th>Descripcion</th>
+            <th>Precio</th>
+            <th style="width: 5%;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of dataProduct">
+            <td>{{item.code}}</td>
+            <td>{{item.description}}</td>
+            <td>{{item.price}}</td>
+            <td>
+              <div class="overlay-edit">
+                  <button type="button" class="btn btn-icon btn-primary" (click)="addCart(item)">
+                    <i class="fa fa-shopping-cart" ></i>
+                  </button>
+                </div>
+            </td>
+          </tr>
+        </tbody>
+      
+    </table>
+  </div>
+</app-card>
+
+
+<!-- modals -->
+<ng-template #modalShowCart let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="modal-title">Productos del pedido</h5>
+    <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="c('c')"
+      ><span aria-hidden="true">&times;</span></button>
+  </div>
+  <div class="modal-body">
+    <app-cart [product]="cart" (invoice)="invoiceEmit($event)"></app-cart>
+  </div>
+</ng-template>
